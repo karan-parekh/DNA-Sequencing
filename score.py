@@ -15,6 +15,7 @@ def purify(text):
 
 
 def pretty_print_match(subject, query, subject_start, query_start, length):
+    """Prints in a proper format for console output"""
     print(str(subject_start) + (' ' * length) + str(subject_start+length))
     print('  ' + subject[subject_start:subject_start+length])
     print('  ' + query[query_start:query_start+length])
@@ -23,6 +24,7 @@ def pretty_print_match(subject, query, subject_start, query_start, length):
 
 
 def score_match(subject, query, subject_start, query_start, length, negative_score=False):
+    """Matches and returns the score for a primer with the genome at each base"""
     score = 0
     # for each base in the match
     for i in range(0, length):
@@ -38,6 +40,8 @@ def score_match(subject, query, subject_start, query_start, length, negative_sco
 
 
 def try_all_matches(subject, query):
+    """Carries out all the possible matches for a primer through the entire genome
+    and prints the highest score match"""
     old_score = 0
     for subject_start in range(0, len(subject)):
         for query_start in range(0, len(query)):
@@ -53,15 +57,14 @@ def try_all_matches(subject, query):
     pretty_print_match(subject, query, ss, qs, length)
 
 
-with open('genomes/mac239.txt', 'r') as f:
-    dope_genome = f.read()
-    pure_genome = purify(dope_genome)
+if __name__ == "__main__":
+    with open('genomes/mac239.txt', 'r') as f:  # opens the genome file and purifies incase of unwanted characters
+        dope_genome = f.read()
+        genome = purify(dope_genome)
 
-genome = pure_genome
-
-with open('primers/primers.csv', 'r') as f:
-    primers = csv.reader(f)
-    next(primers)
-    for primer in primers:
-        print("Name: ", primer[1])
-        try_all_matches(genome.upper(), primer[2].upper())
+    with open('primers/primers.csv', 'r') as f:  # opens the primer csv file for scoring
+        primers = csv.reader(f)
+        next(primers)
+        for primer in primers:
+            print("Name: ", primer[1])
+            try_all_matches(genome.upper(), primer[2].upper())
