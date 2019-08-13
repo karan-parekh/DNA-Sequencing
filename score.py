@@ -39,9 +39,8 @@ def score_match(subject, query, subject_start, query_start, length, negative_sco
     return score
 
 
-def try_all_matches(subject, query):
-    """Carries out all the possible matches for a primer through the entire genome
-    and prints the highest score match"""
+def crawl_genome(subject, query):
+    """Crawls the primer through the entire genome for highest score"""
     old_score = 0
     for subject_start in range(0, len(subject)):
         for query_start in range(0, len(query)):
@@ -57,8 +56,24 @@ def try_all_matches(subject, query):
     pretty_print_match(subject, query, ss, qs, length)
 
 
+def reverse_complement(rev_primer):
+    rev_primer = rev_primer[::-1]
+    comp_primer = []
+    for p in rev_primer:
+        if p == 'A':
+            comp_primer.append('T')
+        elif p == 'C':
+            comp_primer.append('G')
+        elif p == 'T':
+            comp_primer.append('A')
+        elif p == 'G':
+            comp_primer.append('C')
+
+    return "".join(comp_primer)
+
+
 if __name__ == "__main__":
-    with open('genomes/mac239.txt', 'r') as f:  # opens the genome file and purifies incase of unwanted characters
+    with open('genomes/mac239.txt', 'r') as f:  # opens the genome file and purifies in-case of unwanted characters
         dope_genome = f.read()
         genome = purify(dope_genome)
 
@@ -67,4 +82,8 @@ if __name__ == "__main__":
         next(primers)
         for primer in primers:
             print("Name: ", primer[1])
-            try_all_matches(genome.upper(), primer[2].upper())
+            print("Direction: F")
+            crawl_genome(genome.upper(), primer[2].upper())
+            rev_comp_primer = reverse_complement(primer[2].upper())
+            print("Direction: R")
+            crawl_genome(genome.upper(), rev_comp_primer.upper())
