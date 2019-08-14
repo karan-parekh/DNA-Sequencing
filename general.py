@@ -9,7 +9,7 @@ def create_project_dir(directory):
 
 # Create queue and crawled files (if not created)
 def create_data_files():
-    queue = os.path.join('queue.txt')
+    queue = os.path.join('queue.csv')
     crawled = os.path.join('crawled.txt')
     if not os.path.isfile(queue):
         write_file(queue, '')

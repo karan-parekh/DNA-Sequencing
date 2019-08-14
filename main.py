@@ -1,8 +1,8 @@
+import csv
 import threading
 from queue import Queue
 from sequence import Sequence
 from general import *
-import csv
 
 
 QUEUE_FILE = 'queue.csv'
@@ -15,12 +15,12 @@ Sequence()
 def populate_queue():
     with open('primers/primers.csv', 'r') as p:
         primers = csv.DictReader(p)
-        next(primers)
 
         with open('queue.csv', 'w') as q:
             fieldnames = ['name', 'sequence']
             csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
             csv_writer.writeheader()
+            next(primers)
             for primer in primers:
                 d = {'name': primer['name'], 'sequence': primer['sequence']}
                 csv_writer.writerow(d)

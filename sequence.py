@@ -16,7 +16,7 @@ class Sequence:
 
     @staticmethod
     def boot():
-        with open('genomes/mac239.txt', 'r') as f:  # opens the genome file and purifies in-case of unwanted characters
+        with open('genomes/mac239.txt', 'r') as f:
             dope_genome = f.read()
             Sequence.genome = Sequence.purify(dope_genome)
         create_data_files()
