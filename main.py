@@ -7,7 +7,7 @@ import csv
 
 QUEUE_FILE = 'queue.csv'
 CRAWLED_FILE = 'crawled.txt'
-NUMBER_OF_THREADS = 8
+NUMBER_OF_THREADS = 4
 queue = Queue()
 Sequence()
 
@@ -55,10 +55,7 @@ def crawl():
         create_jobs()
 
 
-populate_queue()
-create_workers()
-crawl()
-
-# if __name__ == "__main__":
-#     create_workers()
-#     crawl()
+if __name__ == "__main__":
+    populate_queue()
+    create_workers()
+    crawl()

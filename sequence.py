@@ -26,20 +26,45 @@ class Sequence:
     @staticmethod
     def crawl_genome(thread_name, primer):
         if primer not in Sequence.crawled:
+            original_primer = primer
             primer = primer.split(",")
             primer = {'name': primer[0], 'seq': primer[1]}
-            print(primer)
             print(thread_name, "now crawling", primer['name'])
             print('Queue ', str(len(Sequence.queue)), '| Crawled ', str(len(Sequence.crawled)))
-            f_score = Sequence.try_all_matches(Sequence.genome, primer['seq'])
+            print('--------------------\n')
+            match_f = Sequence.try_all_matches(Sequence.genome, primer['seq'])
             rev_comp_primer = Sequence.reverse_complement(primer['seq'])
-            r_score = Sequence.try_all_matches(Sequence.genome, rev_comp_primer)
-            if f_score > r_score:
-                pass  # write score in csv file
+            match_r = Sequence.try_all_matches(Sequence.genome, rev_comp_primer)
+            if match_f['score'] > match_r['score']:
+                Sequence.print_match(primer['name'], match_f['score'], match_f['genome'], match_f['primer'],
+                                     match_f['genome_index'], match_f['primer_index'], match_f['length'], 'F')
             else:
-                pass  # write score in csv file
-            Sequence.queue.remove(primer)
-            Sequence.crawled.add(primer)
+                Sequence.print_match(primer['name'], match_r['score'], match_r['genome'], match_r['primer'],
+                                     match_r['genome_index'], match_r['primer_index'], match_r['length'], 'R')
+            Sequence.queue.remove(original_primer)
+            Sequence.crawled.add(original_primer)
+
+    @staticmethod
+    def try_all_matches(subject, query):
+        """Crawls the primer through the entire genome for highest score"""
+        subject, query = subject.upper(), query.upper()
+        old_score = 0
+        for subject_start in range(0, len(subject)):
+            for query_start in range(0, len(query)):
+                for length in range(0, len(query)):
+                    if subject_start + length < len(subject) and query_start + length < len(query):
+                        new_score = Sequence.score_match(subject, query, subject_start, query_start, length)
+                        if new_score > old_score:
+                            high_score = new_score
+                            old_score = new_score
+                            genome_index = subject_start
+                            primer_index = query_start
+        return {'score': high_score,
+                'genome': subject,
+                'primer': query,
+                'genome_index': genome_index,
+                'primer_index': primer_index,
+                'length': length}
 
     @staticmethod
     def score_match(subject, query, subject_start, query_start, length, negative_score=False):
@@ -74,27 +99,11 @@ class Sequence:
         return "".join(comp_primer)
 
     @staticmethod
-    def try_all_matches(subject, query):
-        """Crawls the primer through the entire genome for highest score"""
-        subject, query = subject.upper(), query.upper()
-        old_score = 0
-        for subject_start in range(0, len(subject)):
-            for query_start in range(0, len(query)):
-                for length in range(0, len(query)):
-                    if subject_start + length < len(subject) and query_start + length < len(query):
-                        new_score = Sequence.score_match(subject, query, subject_start, query_start, length)
-                        if new_score > old_score:
-                            high_score = new_score
-                            old_score = new_score
-                            ss = subject_start
-                            qs = query_start
-        print('Score : ' + str(high_score))
-        Sequence.pretty_print_match(subject, query, ss, qs, length)
-        return subject, query, ss, qs, length
-
-    @staticmethod
-    def pretty_print_match(subject, query, subject_start, query_start, length):
+    def print_match(name, score, subject, query, subject_start, query_start, length, direction):
         """Prints in a proper format for console output"""
+        print("Name: ", name)
+        print("Direction: ", direction)
+        print('Score : ' + str(score))
         print(str(subject_start) + (' ' * length) + str(subject_start + length))
         print('  ' + subject[subject_start:subject_start + length])
         print('  ' + query[query_start:query_start + length])
