@@ -1,12 +1,29 @@
 import threading
 from queue import Queue
-from score import *
+from sequence import Sequence
 from general import *
+import csv
 
-QUEUE_FILE = 'queue.txt'
+
+QUEUE_FILE = 'queue.csv'
 CRAWLED_FILE = 'crawled.txt'
 NUMBER_OF_THREADS = 8
 queue = Queue()
+Sequence()
+
+
+def populate_queue():
+    with open('primers/primers.csv', 'r') as p:
+        primers = csv.DictReader(p)
+        next(primers)
+
+        with open('queue.csv', 'w') as q:
+            fieldnames = ['name', 'sequence']
+            csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
+            csv_writer.writeheader()
+            for primer in primers:
+                d = {'name': primer['name'], 'sequence': primer['sequence']}
+                csv_writer.writerow(d)
 
 
 def create_workers():
@@ -19,7 +36,7 @@ def create_workers():
 def work():
     while True:
         primer = queue.get()
-        crawl_genome(threading.current_thread().name, primer)
+        Sequence.crawl_genome(threading.current_thread().name, primer)
         queue.task_done()
 
 
@@ -27,6 +44,7 @@ def create_jobs():
     for primer in file_to_set(QUEUE_FILE):
         queue.put(primer)
     queue.join()
+    print(queue.get())
     crawl()
 
 
@@ -37,5 +55,10 @@ def crawl():
         create_jobs()
 
 
+populate_queue()
 create_workers()
 crawl()
+
+# if __name__ == "__main__":
+#     create_workers()
+#     crawl()

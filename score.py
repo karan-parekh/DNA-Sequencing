@@ -1,5 +1,6 @@
 # DNA Sequencing to get score for a primer with a genome
 # Ref: https://pythonforbiologists.com/sequence-similarity-search
+# Ref: https://github.com/buckyroberts/Spider/blob/master
 
 import csv
 
@@ -39,7 +40,7 @@ def score_match(subject, query, subject_start, query_start, length, negative_sco
     return score
 
 
-def crawl_genome(subject, query):
+def try_all_matches(subject, query):
     """Crawls the primer through the entire genome for highest score"""
     old_score = 0
     for subject_start in range(0, len(subject)):
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         for primer in primers:
             print("Name: ", primer[1])
             print("Direction: F")
-            crawl_genome(genome.upper(), primer[2].upper())
+            try_all_matches(genome.upper(), primer[2].upper())
             rev_comp_primer = reverse_complement(primer[2].upper())
             print("Direction: R")
-            crawl_genome(genome.upper(), rev_comp_primer.upper())
+            try_all_matches(genome.upper(), rev_comp_primer.upper())

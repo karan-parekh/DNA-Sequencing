@@ -1,4 +1,4 @@
-No,Primer Name,Sequence,direction,length
+no,name,sequence,direction,length
 1,gag2_F1,GACATCTAGTGGCAGAAACT,F,20
 2,gag2_R1,CCGAACTTCTTTTCCTCTACT,R,21
 3,gag2_F2,AGACATCTAGTGGCAGAAAC,F,20
