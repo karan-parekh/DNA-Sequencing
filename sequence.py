@@ -38,9 +38,11 @@ class Sequence:
             if match_f['score'] > match_r['score']:
                 Sequence.print_match(primer['name'], match_f['score'], match_f['genome'], match_f['primer'],
                                      match_f['genome_index'], match_f['primer_index'], match_f['length'], 'F')
+                # append_to_file("results.csv", match_f)
             else:
                 Sequence.print_match(primer['name'], match_r['score'], match_r['genome'], match_r['primer'],
                                      match_r['genome_index'], match_r['primer_index'], match_r['length'], 'R')
+                # append_to_file("results.csv", match_r)
             Sequence.queue.remove(original_primer)
             Sequence.crawled.add(original_primer)
 
@@ -75,7 +77,6 @@ class Sequence:
             # first figure out the matching base from both sequences
             subject_base = subject[subject_start + i]
             query_base = query[query_start + i]
-            # then adjust the score up or down
             if subject_base == query_base:
                 score = score + 1
             elif negative_score:
@@ -111,20 +112,16 @@ class Sequence:
         print('\n--------------------\n')
 
     @staticmethod
-    def update_files():
-        set_to_file(Sequence.queue, Sequence.queue_file)
-        set_to_file(Sequence.crawled, Sequence.crawled_file)
-
-    @staticmethod
     def purify(text):
         """Replaces all new lines and carriage returns in genome text file"""
         text = text.replace('\n', '')
         text = text.replace('\r', '')
-        if text.isalpha():
+        if text.isalpha():  # ToDo: Replace with regular expression for combination of 'ACTG'
             return text
         else:
             print("Genome text file must only contain alphabets")
 
-
-
-
+    @staticmethod
+    def update_files():
+        set_to_file(Sequence.queue, Sequence.queue_file)
+        set_to_file(Sequence.crawled, Sequence.crawled_file)
