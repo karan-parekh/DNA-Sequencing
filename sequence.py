@@ -3,51 +3,51 @@ from general import *
 
 class Sequence:
 
-    genome = ''
-    queue_file = ''
-    crawled_file = ''
-    queue = set()
-    crawled = set()
-
     def __init__(self):
-        Sequence.queue_file = 'queue.csv'
-        Sequence.crawled_file = 'crawled.txt'
+        self.genome = ''
+        self.queue = set()
+        self.crawled = set()
+        self.queue_file = 'queue.csv'
+        self.crawled_file = 'crawled.txt'
         self.boot()
 
-    @staticmethod
-    def boot():
+    def boot(self):
         with open('genomes/mac239.txt', 'r') as f:
             dope_genome = f.read()
-            Sequence.genome = Sequence.purify(dope_genome)
+            self.genome = self.purify(dope_genome)
         create_data_files()
-        Sequence.queue = file_to_set(Sequence.queue_file)
-        Sequence.crawled = file_to_set(Sequence.crawled_file)
+        self.queue = file_to_set(self.queue_file)
+        self.crawled = file_to_set(self.crawled_file)
 
-    @staticmethod
-    def crawl_genome(thread_name, primer):
-        if primer not in Sequence.crawled:
+    def crawl_genome(self, thread_name, primer):
+        if primer not in self.crawled:
             original_primer = primer
             primer = primer.split(",")
             primer = {'name': primer[0], 'seq': primer[1]}
             print(thread_name, "now crawling", primer['name'])
-            print('Queue ', str(len(Sequence.queue)), '| Crawled ', str(len(Sequence.crawled)))
+            print('Queue ', str(len(self.queue)), '| Crawled ', str(len(self.crawled)))
             print('--------------------\n')
-            match_f = Sequence.try_all_matches(Sequence.genome, primer['seq'])
-            rev_comp_primer = Sequence.reverse_complement(primer['seq'])
-            match_r = Sequence.try_all_matches(Sequence.genome, rev_comp_primer)
+            match_f = self.try_all_matches(self.genome, primer['seq'])
+            rev_comp_primer = self.reverse_complement(primer['seq'])
+            match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
-                Sequence.print_match(primer['name'], match_f['score'], match_f['genome'], match_f['primer'],
-                                     match_f['genome_index'], match_f['primer_index'], match_f['length'], 'F')
+                self.print_match(
+                        primer['name'],
+                        match_f,
+                        'Forward'
+                    )
                 # append_to_file("results.csv", match_f)
             else:
-                Sequence.print_match(primer['name'], match_r['score'], match_r['genome'], match_r['primer'],
-                                     match_r['genome_index'], match_r['primer_index'], match_r['length'], 'R')
+                self.print_match(
+                        primer['name'],
+                        match_r,
+                        'Reverse'
+                    )
                 # append_to_file("results.csv", match_r)
-            Sequence.queue.remove(original_primer)
-            Sequence.crawled.add(original_primer)
+            self.queue.remove(original_primer)
+            self.crawled.add(original_primer)
 
-    @staticmethod
-    def try_all_matches(subject, query):
+    def try_all_matches(self, subject, query):
         """Crawls the primer through the entire genome for highest score"""
         subject, query = subject.upper(), query.upper()
         old_score = 0
@@ -55,21 +55,23 @@ class Sequence:
             for query_start in range(0, len(query)):
                 for length in range(0, len(query)):
                     if subject_start + length < len(subject) and query_start + length < len(query):
-                        new_score = Sequence.score_match(subject, query, subject_start, query_start, length)
+                        new_score = self.score_match(subject, query, subject_start, query_start, length)
                         if new_score > old_score:
                             high_score = new_score
                             old_score = new_score
                             genome_index = subject_start
                             primer_index = query_start
-        return {'score': high_score,
-                'genome': subject,
-                'primer': query,
-                'genome_index': genome_index,
-                'primer_index': primer_index,
-                'length': length}
+        return {
+            'score': high_score,
+            'genome': subject,
+            'primer': query,
+            'genome_index': genome_index,
+            'primer_index': primer_index,
+            'length': length
+        }
 
     @staticmethod
-    def score_match(subject, query, subject_start, query_start, length, negative_score=False):
+    def score_match(subject, query, subject_start, query_start, length):
         """Matches and returns the score for a primer with the genome at each base"""
         score = 0
         # for each base in the match
@@ -79,8 +81,6 @@ class Sequence:
             query_base = query[query_start + i]
             if subject_base == query_base:
                 score = score + 1
-            elif negative_score:
-                score = score - 1
         return score
 
     @staticmethod
@@ -100,7 +100,8 @@ class Sequence:
         return "".join(comp_primer)
 
     @staticmethod
-    def print_match(name, score, subject, query, subject_start, query_start, length, direction):
+    def print_match(name, match, direction):
+        score, subject, query, subject_start, query_start, length = match.values()
         """Prints in a proper format for console output"""
         print("Name: ", name)
         print("Direction: ", direction)
@@ -121,7 +122,6 @@ class Sequence:
         else:
             print("Genome text file must only contain alphabets")
 
-    @staticmethod
-    def update_files():
-        set_to_file(Sequence.queue, Sequence.queue_file)
-        set_to_file(Sequence.crawled, Sequence.crawled_file)
+    def update_files(self):
+        set_to_file(self.queue, self.queue_file)
+        set_to_file(self.crawled, self.crawled_file)

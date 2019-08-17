@@ -9,7 +9,7 @@ QUEUE_FILE = 'queue.csv'
 CRAWLED_FILE = 'crawled.txt'
 NUMBER_OF_THREADS = 4
 queue = Queue()
-Sequence()
+sequence = Sequence()
 
 
 def populate_queue():
@@ -36,7 +36,7 @@ def create_workers():
 def work():
     while True:
         primer = queue.get()
-        Sequence.crawl_genome(threading.current_thread().name, primer)
+        sequence.crawl_genome(threading.current_thread().name, primer)
         queue.task_done()
 
 
