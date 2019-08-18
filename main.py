@@ -7,7 +7,7 @@ from general import *
 
 QUEUE_FILE = 'queue.csv'
 CRAWLED_FILE = 'crawled.txt'
-NUMBER_OF_THREADS = 4
+NUMBER_OF_THREADS = 8
 queue = Queue()
 sequence = Sequence()
 

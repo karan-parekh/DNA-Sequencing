@@ -31,18 +31,10 @@ class Sequence:
             rev_comp_primer = self.reverse_complement(primer['seq'])
             match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
-                self.print_match(
-                        primer['name'],
-                        match_f,
-                        'Forward'
-                    )
+                self.print_match(primer['name'], match_f, 'Forward')
                 # append_to_file("results.csv", match_f)
             else:
-                self.print_match(
-                        primer['name'],
-                        match_r,
-                        'Reverse'
-                    )
+                self.print_match(primer['name'], match_r, 'Reverse')
                 # append_to_file("results.csv", match_r)
             self.queue.remove(original_primer)
             self.crawled.add(original_primer)
