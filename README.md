@@ -2,7 +2,7 @@
 
 This project aims at making DNA sequencing easy for biologists
 
-## Installation
+## Usage
 
 ### To run on Command Line
 
