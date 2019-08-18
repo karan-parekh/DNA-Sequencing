@@ -14,6 +14,10 @@ Clone the repository
 
 Paste your genome DNA sequence as plain text in the '''genome''' folder
 
+example:
+
+```tggaagggatttattacagtgc...```
+
 ### STEP 3. 
 
 Paste your primers file (.csv) in the '''primers''' folder with headers '''name''' and '''sequence'''
@@ -24,13 +28,13 @@ example:
 name,sequence
 gag2_F1,GACATCTAGTGGCAGAAACT
 gag2_R1,CCGAACTTCTTTTCCTCTACT
-Pol 2F,TAAATCTACCCGTCGCCAAG
+Pol_2F,TAAATCTACCCGTCGCCAAG
 .
 .
 ```
 
 ### STEP 4.
-run '''main.py'''
+run ```main.py```
 
 
 ### GUI is Work In Progress
