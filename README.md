@@ -17,7 +17,8 @@ Paste your genome DNA sequence as plain text in the '''genome''' folder
 ### STEP 3. 
 
 Paste your primers file (.csv) in the '''primers''' folder with headers '''name''' and '''sequence'''
-exmple:
+
+eaxmple:
 
 ```python
 name,sequence
