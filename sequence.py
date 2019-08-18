@@ -32,10 +32,12 @@ class Sequence:
             match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
                 self.print_match(primer['name'], match_f, 'Forward')
-                # append_to_file("results.csv", match_f)
+                # print("OOOOOOOOO", (primer['name'], match_f['primer']))
+                append_to_csv_file("results.csv", primer['name'], match_f['primer'])
             else:
                 self.print_match(primer['name'], match_r, 'Reverse')
-                # append_to_file("results.csv", match_r)
+                # print("OOOOOOOOO", (primer['name'], match_r['primer']))
+                append_to_csv_file("results.csv", primer['name'], match_r['primer'])
             self.queue.remove(original_primer)
             self.crawled.add(original_primer)
 

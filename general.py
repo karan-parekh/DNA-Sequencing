@@ -1,4 +1,5 @@
 import os
+import csv
 
 
 def create_project_dir(directory):
@@ -27,6 +28,16 @@ def write_file(path, data):
 def append_to_file(path, data):
     with open(path, 'a') as file:
         file.write(data + '\n')
+
+
+# Add data onto an existing csv file
+def append_to_csv_file(path, *args):
+    name, primer = args
+    with open(path, 'a') as file:
+        fieldnames = ['name', 'sequence']
+        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        d = {'name': name, 'sequence': primer}
+        csv_writer.writerow(d)
 
 
 # Delete the contents of a file
