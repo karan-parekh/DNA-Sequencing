@@ -1,6 +1,6 @@
 # DNA-Sequencing
 
-This project aims at making DNA sequencing easy for biologist
+This project aims at making DNA sequencing easy for biologists
 
 ## Installation
 
