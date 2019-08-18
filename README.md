@@ -12,7 +12,7 @@ Clone the repository
 
 ### STEP 2. 
 
-Paste your genome DNA sequence as plain text in the '''genome''' folder
+Paste your genome DNA sequence as plain text in the ```genome``` folder as ```genome.txt```
 
 example:
 
@@ -20,11 +20,11 @@ example:
 
 ### STEP 3. 
 
-Paste your primers file (.csv) in the '''primers''' folder with headers '''name''' and '''sequence'''
+Paste your ```primers.csv``` file in the ```primers``` folder with headers ```name``` and ```sequence```
 
 example:
 
-```python
+```
 name,sequence
 gag2_F1,GACATCTAGTGGCAGAAACT
 gag2_R1,CCGAACTTCTTTTCCTCTACT
