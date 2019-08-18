@@ -30,3 +30,6 @@ Pol 2F,TAAATCTACCCGTCGCCAAG
 
 ### STEP 4.
 run '''main.py'''
+
+
+### GUI is Work In Progress
