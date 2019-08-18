@@ -36,6 +36,7 @@ def append_to_csv_file(path, *args):
     with open(path, 'a') as file:
         fieldnames = ['name', 'sequence']
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        csv_writer.writeheader()
         d = {'name': name, 'sequence': primer}
         csv_writer.writerow(d)
 

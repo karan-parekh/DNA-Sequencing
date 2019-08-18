@@ -19,8 +19,6 @@ def populate_queue():
         with open('queue.csv', 'w') as q:
             fieldnames = ['name', 'sequence']
             csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
-            csv_writer.writeheader()
-            next(primers)
             for primer in primers:
                 d = {'name': primer['name'], 'sequence': primer['sequence']}
                 csv_writer.writerow(d)

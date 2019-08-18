@@ -16,6 +16,7 @@ class Sequence:
             dope_genome = f.read()
             self.genome = self.purify(dope_genome)
         create_data_files()
+        delete_file_contents('results.csv')
         self.queue = file_to_set(self.queue_file)
         self.crawled = file_to_set(self.crawled_file)
 
