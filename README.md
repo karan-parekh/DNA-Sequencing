@@ -34,7 +34,7 @@ Pol_2F,TAAATCTACCCGTCGCCAAG
 ```
 
 ### STEP 4.
-run ```main.py```
+run ```main.py```. Results are stored in ```results.py```
 
 
 ### GUI is Work In Progress
