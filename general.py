@@ -12,10 +12,24 @@ def create_project_dir(directory):
 def create_data_files():
     queue = os.path.join('queue.csv')
     crawled = os.path.join('crawled.txt')
+    results = os.path.join('results.csv')
     if not os.path.isfile(queue):
         write_file(queue, '')
     if not os.path.isfile(crawled):
         write_file(crawled, '')
+    with open(results, 'w') as file:
+        fieldnames = [
+            'name',
+            'sequence',
+            'direction',
+            'length',
+            'match',
+            'mismatch',
+            'coordinate (start)',
+            'coordinate (end)'
+        ]
+        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        csv_writer.writeheader()
 
 
 # Create a new file
@@ -32,12 +46,30 @@ def append_to_file(path, data):
 
 # Add data onto an existing csv file
 def append_to_csv_file(path, *args):
-    name, primer = args
+    name, match, direction = args
+    score, _, query, subject_start, _, length = match.values()
     with open(path, 'a') as file:
-        fieldnames = ['name', 'sequence']
+        fieldnames = [
+            'name',
+            'sequence',
+            'direction',
+            'length',
+            'match',
+            'mismatch',
+            'coordinate (start)',
+            'coordinate (end)'
+        ]
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
-        csv_writer.writeheader()
-        d = {'name': name, 'sequence': primer}
+        d = {
+            'name': name,
+            'sequence': query,
+            'direction': direction,
+            'length': length,
+            'match': score,
+            'mismatch': length - score,
+            'coordinate (start)': subject_start,
+            'coordinate (end)': subject_start + length
+            }
         csv_writer.writerow(d)
 
 
