@@ -15,10 +15,24 @@ class Sequence:
         with open('genomes/mac239.txt', 'r') as f:
             dope_genome = f.read()
             self.genome = self.purify(dope_genome)
-        create_data_files()
         delete_file_contents('results.csv')
+        delete_file_contents('crawled.txt')
+        create_data_files()
+        self.populate_queue()
         self.queue = file_to_set(self.queue_file)
         self.crawled = file_to_set(self.crawled_file)
+
+    @staticmethod
+    def populate_queue():
+        with open('primers/primers.csv', 'r') as p:
+            primers = csv.DictReader(p)
+
+            with open('queue.csv', 'w') as q:
+                fieldnames = ['name', 'sequence']
+                csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
+                for primer in primers:
+                    d = {'name': primer['name'], 'sequence': primer['sequence']}
+                    csv_writer.writerow(d)
 
     def crawl_genome(self, thread_name, primer):
         if primer not in self.crawled:
@@ -33,14 +47,14 @@ class Sequence:
             match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
                 self.print_match(primer['name'], match_f, 'Forward')
-                # print("OOOOOOOOO", (primer['name'], match_f['primer']))
-                append_to_csv_file("results.csv", primer['name'], match_f['primer'])
+                append_to_csv_file("results.csv", primer['name'], match_f, 'Forward')
             else:
                 self.print_match(primer['name'], match_r, 'Reverse')
-                # print("OOOOOOOOO", (primer['name'], match_r['primer']))
-                append_to_csv_file("results.csv", primer['name'], match_r['primer'])
+                append_to_csv_file("results.csv", primer['name'], match_r, 'Reverse')
             self.queue.remove(original_primer)
+            set_to_file(self.queue, self.queue_file)
             self.crawled.add(original_primer)
+            set_to_file(self.crawled, self.crawled_file)
 
     def try_all_matches(self, subject, query):
         """Crawls the primer through the entire genome for highest score"""
