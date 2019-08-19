@@ -1,0 +1,6 @@
+crawled.txt
+queue.csv
+results.csv
+
+.idea/
+__pycache__/
