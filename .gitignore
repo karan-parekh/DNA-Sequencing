@@ -1,6 +1,7 @@
 crawled.txt
 queue.csv
 results.csv
+custom_primers.csv
 
 .idea/
 __pycache__/

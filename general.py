@@ -1,5 +1,19 @@
 import os
 import csv
+from functools import wraps
+from time import time
+
+
+def measure_time(func):
+    @wraps(func)
+    def _time_it(*args, **kwargs):
+        start = int(round(time() * 1000))
+        try:
+            return func(*args, **kwargs)
+        finally:
+            end_ = int(round(time() * 1000)) - start
+            print(f"Total execution time: {end_ if end_ > 0 else 0} ms")
+    return _time_it
 
 
 def create_project_dir(directory):
@@ -17,8 +31,9 @@ def create_data_files():
         write_file(queue, '')
     if not os.path.isfile(crawled):
         write_file(crawled, '')
+
     with open(results, 'w') as file:
-        fieldnames = [
+        fieldnames = (
             'name',
             'sequence',
             'direction',
@@ -27,7 +42,12 @@ def create_data_files():
             'mismatch',
             'coordinate (start)',
             'coordinate (end)'
-        ]
+        )
+        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        csv_writer.writeheader()
+
+    with open('primers/custom_primers.csv', 'w') as file:
+        fieldnames = ('name', 'sequence')
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
         csv_writer.writeheader()
 
@@ -44,12 +64,20 @@ def append_to_file(path, data):
         file.write(data + '\n')
 
 
-# Add data onto an existing csv file
-def append_to_csv_file(path, *args):
+def append_to_csv(path, *args, fieldnames=("name", "sequence")):
+    name, seq = args
+    with open(path, 'a') as file:
+        fieldnames = fieldnames
+        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        row = {'name': name, 'sequence': seq}
+        csv_writer.writerow(row)
+
+
+def append_to_results(*args):
     name, match, direction = args
     score, _, query, subject_start, _, length = match.values()
-    with open(path, 'a') as file:
-        fieldnames = [
+    with open("results.csv", 'a') as file:
+        fieldnames = (
             'name',
             'sequence',
             'direction',
@@ -58,9 +86,9 @@ def append_to_csv_file(path, *args):
             'mismatch',
             'coordinate (start)',
             'coordinate (end)'
-        ]
+        )
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
-        d = {
+        row = {
             'name': name,
             'sequence': query,
             'direction': direction,
@@ -70,7 +98,7 @@ def append_to_csv_file(path, *args):
             'coordinate (start)': subject_start,
             'coordinate (end)': subject_start + length
             }
-        csv_writer.writerow(d)
+        csv_writer.writerow(row)
 
 
 # Delete the contents of a file
