@@ -42,7 +42,7 @@ class Sequence:
                     d = {'name': primer['name'], 'sequence': primer['sequence']}
                     csv_writer.writerow(d)
 
-    @measure_time
+    # @measure_time
     def crawl_genome(self, thread_name, primer):
         if primer not in self.crawled:
             original_primer = primer
@@ -55,9 +55,13 @@ class Sequence:
             rev_comp_primer = self.reverse_complement(primer['seq'])
             match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
+                # ToDo: match_f['name'] = primer['name']
+                #       match_f['direction'] = 'Forward'
                 self.print_match(primer['name'], match_f, 'Forward')
                 append_to_results(primer['name'], match_f, 'Forward')
             else:
+                # ToDo: match_r['name'] = primer['name']
+                #       match_r['direction'] = 'Reverse'
                 self.print_match(primer['name'], match_r, 'Reverse')
                 append_to_results(primer['name'], match_r, 'Reverse')
             self.queue.remove(original_primer)
