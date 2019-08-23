@@ -4,4 +4,5 @@ results.csv
 custom_primers.csv
 
 .idea/
+
 __pycache__/

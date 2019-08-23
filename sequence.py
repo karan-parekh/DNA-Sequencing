@@ -3,10 +3,9 @@ from general import *
 
 class Sequence:
 
-    def __init__(self, genome_file='genomes/mac239.txt', primers_file='primers/primers.csv', custom_primers=False):
+    def __init__(self, genome_file=None, primers_file=None):
         self.genome_file = genome_file
         self.primers_file = primers_file
-        self.custom_primers = custom_primers
         self.genome = None
         self.queue = set()
         self.crawled = set()
@@ -15,23 +14,19 @@ class Sequence:
         # self.boot()
 
     def boot(self):
-        if self.genome is None:
-            with open(self.genome_file, 'r') as f:
-                dope_genome = f.read()
-                self.genome = self.purify(dope_genome)
-        else:
-            self.genome = self.purify(self.genome)
+        print("GENOME FILE: ", self.genome_file)
+        with open(self.genome_file, 'r') as f:
+            dope_genome = f.read()
+            self.genome = self.purify(dope_genome)
         delete_file_contents('results.csv')
         delete_file_contents('crawled.txt')
-        delete_file_contents('primers/custom_primers.csv')
         create_data_files()
         self.populate_queue()
         self.queue = file_to_set(self.queue_file)
         self.crawled = file_to_set(self.crawled_file)
 
     def populate_queue(self):
-        if self.custom_primers:
-            self.primers_file = 'primers/custom_primers.csv'
+        print("PRIMER FILE: ", self.primers_file)
         with open(self.primers_file, 'r') as p:
             primers = csv.DictReader(p)
 
@@ -40,6 +35,7 @@ class Sequence:
                 csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
                 for primer in primers:
                     d = {'name': primer['name'], 'sequence': primer['sequence']}
+                    print(d)
                     csv_writer.writerow(d)
 
     # @measure_time

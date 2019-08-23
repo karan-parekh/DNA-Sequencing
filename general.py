@@ -46,11 +46,6 @@ def create_data_files():
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
         csv_writer.writeheader()
 
-    with open('primers/custom_primers.csv', 'w') as file:
-        fieldnames = ('name', 'sequence')
-        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
-        csv_writer.writeheader()
-
 
 # Create a new file
 def write_file(path, data):
