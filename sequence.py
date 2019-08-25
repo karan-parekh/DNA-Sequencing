@@ -35,7 +35,6 @@ class Sequence:
                 csv_writer = csv.DictWriter(q, fieldnames=fieldnames)
                 for primer in primers:
                     d = {'name': primer['name'], 'sequence': primer['sequence']}
-                    print(d)
                     csv_writer.writerow(d)
 
     # @measure_time
