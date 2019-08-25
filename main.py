@@ -42,6 +42,7 @@ def main():
     primers_path = input("Enter Primers file path: ")
     sequence.genome_file = genome_path
     sequence.primers_file = primers_path
+    sequence.boot()
     create_threads()
     crawl()
 
