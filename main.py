@@ -1,17 +1,16 @@
 import threading
 from queue import Queue
-from sequence import Sequence
 from general import *
-
+from sequence import Sequence
 
 QUEUE_FILE = 'queue.csv'
 CRAWLED_FILE = 'crawled.txt'
-NUMBER_OF_THREADS = 4
+NUMBER_OF_THREADS = 1
 queue = Queue()
 sequence = Sequence()
 
 
-def create_workers():
+def create_threads():
     for _ in range(NUMBER_OF_THREADS):
         t = threading.Thread(target=work)
         t.daemon = True
@@ -25,7 +24,7 @@ def work():
         queue.task_done()
 
 
-def create_jobs():
+def generate_queue():
     for primer in file_to_set(QUEUE_FILE):
         queue.put(primer)
     queue.join()
@@ -35,9 +34,18 @@ def crawl():
     queued_primers = file_to_set(QUEUE_FILE)
     if len(queued_primers) > 0:
         print(str(len(queued_primers)) + ' primers in queue')
-        create_jobs()
+        generate_queue()
 
 
-if __name__ == "__main__":
-    create_workers()
+def main():
+    genome_path = input("Enter Genome file path: ")
+    primers_path = input("Enter Primers file path: ")
+    sequence.genome_file = genome_path
+    sequence.primers_file = primers_path
+    sequence.boot()
+    create_threads()
     crawl()
+
+
+if __name__ == '__main__':
+    main()

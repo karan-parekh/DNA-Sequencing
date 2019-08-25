@@ -3,16 +3,19 @@ from general import *
 
 class Sequence:
 
-    def __init__(self):
-        self.genome = ''
+    def __init__(self, genome_file=None, primers_file=None):
+        self.genome_file = genome_file
+        self.primers_file = primers_file
+        self.genome = None
         self.queue = set()
         self.crawled = set()
         self.queue_file = 'queue.csv'
         self.crawled_file = 'crawled.txt'
-        self.boot()
+        # self.boot()
 
     def boot(self):
-        with open('genomes/mac239.txt', 'r') as f:
+        print("GENOME FILE: ", self.genome_file)
+        with open(self.genome_file, 'r') as f:
             dope_genome = f.read()
             self.genome = self.purify(dope_genome)
         delete_file_contents('results.csv')
@@ -22,9 +25,9 @@ class Sequence:
         self.queue = file_to_set(self.queue_file)
         self.crawled = file_to_set(self.crawled_file)
 
-    @staticmethod
-    def populate_queue():
-        with open('primers/primers.csv', 'r') as p:
+    def populate_queue(self):
+        print("PRIMER FILE: ", self.primers_file)
+        with open(self.primers_file, 'r') as p:
             primers = csv.DictReader(p)
 
             with open('queue.csv', 'w') as q:
@@ -34,6 +37,7 @@ class Sequence:
                     d = {'name': primer['name'], 'sequence': primer['sequence']}
                     csv_writer.writerow(d)
 
+    # @measure_time
     def crawl_genome(self, thread_name, primer):
         if primer not in self.crawled:
             original_primer = primer
@@ -46,15 +50,18 @@ class Sequence:
             rev_comp_primer = self.reverse_complement(primer['seq'])
             match_r = self.try_all_matches(self.genome, rev_comp_primer)
             if match_f['score'] > match_r['score']:
+                # ToDo: match_f['name'] = primer['name']
+                #       match_f['direction'] = 'Forward'
                 self.print_match(primer['name'], match_f, 'Forward')
-                append_to_csv_file("results.csv", primer['name'], match_f, 'Forward')
+                append_to_results(primer['name'], match_f, 'Forward')
             else:
+                # ToDo: match_r['name'] = primer['name']
+                #       match_r['direction'] = 'Reverse'
                 self.print_match(primer['name'], match_r, 'Reverse')
-                append_to_csv_file("results.csv", primer['name'], match_r, 'Reverse')
+                append_to_results(primer['name'], match_r, 'Reverse')
             self.queue.remove(original_primer)
-            set_to_file(self.queue, self.queue_file)
             self.crawled.add(original_primer)
-            set_to_file(self.crawled, self.crawled_file)
+            self.update_files()
 
     def try_all_matches(self, subject, query):
         """Crawls the primer through the entire genome for highest score"""
@@ -94,6 +101,7 @@ class Sequence:
 
     @staticmethod
     def reverse_complement(rev_primer):
+        """Returns the reverse complement of the primer"""
         rev_primer = rev_primer[::-1]
         comp_primer = []
         for p in rev_primer:
