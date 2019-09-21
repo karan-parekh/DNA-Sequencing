@@ -14,16 +14,19 @@ sequences on the same target sequence.
 2. The target sequence is filtered for any kind of unwanted characters such as newline or carriage return
 3. All the queries are put in a queue for further processing
 4. It then searches for the region of the highest score in the target for each query
+5. Output for each query is a row of values with headers ```name```, ```sequence```, ```direction```, ```score```, ```start```, ```end``` 
 5. Results are yielded in the results.csv file, as soon as they're generated, in the project directory
 6. To further speed up the process, it generates 8 threads for 8 different queries
 
 ## Usage:
 1. Download and extract the project zip file
-2. Run ```main.py``` for GUI
-3. Select the text file for Genome (target sequence)
-4. Select the csv file for Primers (query sequences)
-5. Click Design
-6. Resulst will be generated and stored in ```results.csv```
+2. Open terminal/command prompt in the project folder
+3. Run ```python basic_gui.py``` command
+4. On the GUI, select the text file for Genome (target sequence)
+5. Select the csv file for Primers (query sequences)
+6. Click Design
+7. Resulst will be generated and stored in ```results.csv```
 
-Note: Requires python 3 installed on your machine. 
-	  You can install python from www.python.org
+### Note: 
+1. Requires python 3 installed on your machine. You can install python from www.python.org
+2. It may take several minutes to complete all the calculations, depending on size of your selected files
