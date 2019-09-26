@@ -38,10 +38,8 @@ def crawl():
 
 
 def main():
-    genome_path = input("Enter Genome file path: ")
-    primers_path = input("Enter Primers file path: ")
-    sequence.genome_file = genome_path
-    sequence.primers_file = primers_path
+    sequence.genome_file = input("Enter Genome file path: ")
+    sequence.primers_file = input("Enter Primers file path: ")
     sequence.boot()
     create_threads()
     crawl()
