@@ -5,8 +5,7 @@ Biologists require to find similarities among hundreds of DNA strands which is a
 aims at automating this task and eliminate human error
 
 ## Summary: 
-The task is to search for a particular region in the target sequence (a 9kb DNA strand) where the query sequence (another DNA strand of 
-less than 40b) matches with the highest score/max similarity. This has to be repeated a multiple number of times for different query 
+The task is to search for a particular region in the target sequence (a 9kb DNA strand) where the query sequence (another DNA strand of less than 40b) matches with the highest score/max similarity. This has to be repeated multiple number of times for different query
 sequences on the same target sequence.
 
 ## Working:
@@ -21,12 +20,16 @@ sequences on the same target sequence.
 ## Usage:
 1. Download and extract the project zip file
 2. Open terminal/command prompt in the project folder
-3. Run ```python basic_gui.py``` command
+3. Run ```python main_ui.py``` command
 4. On the GUI, select the text file for Genome (target sequence)
 5. Select the csv file for Primers (query sequences)
 6. Click Design
-7. Resulst will be generated and stored in ```results.csv```
+7. Results will be generated and stored in ```results.csv```
 
 ### Note: 
 1. Requires python 3 installed on your machine. You can install python from www.python.org
-2. It may take several minutes to complete all the calculations, depending on size of your selected files
+2. It may take several minutes to complete all the calculations, depending on size of your input files
+
+### Areas of improvement:
+1. Need to develop a an efficient algorithm for faster processing
+2. Need to implement Idempotence
