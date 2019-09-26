@@ -90,7 +90,7 @@ start.grid(row=2, column=1, columnspan=1, padx=2, pady=2)
 
 # -------- Progress Bar -------- #
 progress = Progressbar(root, orient=HORIZONTAL, length=100, mode='indeterminate')
-progress.grid(row=7, columnspan=3, padx=2, pady=2)
+# progress.grid(row=7, columnspan=3, padx=2, pady=2)
 
 
 root.mainloop()
