@@ -31,5 +31,5 @@ sequences on the same target sequence.
 2. It may take several minutes to complete all the calculations, depending on size of your input files
 
 ### Areas of improvement:
-1. Need to develop a an efficient algorithm for faster processing
-2. Need to implement Idempotence
+1. Need to develop an efficient algorithm for faster processing
+2. Need to implement Memoization
