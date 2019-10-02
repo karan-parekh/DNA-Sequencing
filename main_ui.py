@@ -88,7 +88,7 @@ start = Button(root, text="DESIGN")
 start.bind("<Button -1>", main)
 start.grid(row=2, column=1, columnspan=1, padx=2, pady=2)
 
-# -------- Progress Bar -------- #
+# -------- Progress Bar -------- #  Not implemented
 progress = Progressbar(root, orient=HORIZONTAL, length=100, mode='indeterminate')
 # progress.grid(row=7, columnspan=3, padx=2, pady=2)
 
