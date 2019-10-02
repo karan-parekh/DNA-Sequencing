@@ -30,23 +30,20 @@ def work():
 
 
 def generate_queue():
-    for primer in file_to_set(QUEUE_FILE):
-        queue.put(primer)
-    queue.join()
-
-
-def crawl():
     queued_primers = file_to_set(QUEUE_FILE)
     if len(queued_primers) > 0:
         print(str(len(queued_primers)) + ' primers in queue')
-        generate_queue()
+        # generate_queue()
+    for primer in file_to_set(QUEUE_FILE):
+        queue.put(primer)
+    queue.join()
 
 
 def main(event):
     if (sequence.genome_file and sequence.primers_file) is not None:
         sequence.boot()
         create_threads()
-        crawl()
+        generate_queue()
     else:
         print("Please select Genome and Primer files")
 
